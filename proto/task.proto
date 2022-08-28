@@ -1,0 +1,50 @@
+syntax = "proto3";
+option go_package="./grpc_task;grpc_task";
+package grpcTask;
+import "google/protobuf/timestamp.proto";
+
+service GrpcTask {
+  rpc PushTask (TaskMessage) returns (TaskResponse) {}
+  rpc PushMail (Mail) returns (TaskResponse) {}
+}
+
+enum Status {
+  NoDecision = 0;
+  Approve = 1;
+  Decline = -1;
+}
+
+enum Action {
+  Create = 0;
+  Update = 1;
+  Delete = 2;
+}
+
+enum Kind {
+  Task = 0;
+  TaskStatus = 1;
+}
+
+message TaskMessage {
+  string TaskId                      = 1;
+  string Email                       = 2;
+  string Name                        = 3;
+  string Description                 = 4;
+  google.protobuf.Timestamp CreateTs = 5;
+  Status Status                      = 6;
+  google.protobuf.Timestamp EndTime  = 7;
+  repeated string EmailList          = 8;
+  Action Action                      = 9;
+  Kind Kind                          = 10;
+}
+
+message Mail {
+  string Header                      = 1;
+  string Body                        = 2;
+  google.protobuf.Timestamp CreateTs = 3;
+  repeated string EmailList          = 4;
+}
+
+message TaskResponse {
+  bool Success = 1;
+}

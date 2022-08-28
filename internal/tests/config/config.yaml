@@ -1,0 +1,26 @@
+http_config:
+  uri: ":4000"
+  api_version: "/tasks/v1"
+  
+
+grpc_config:
+  host: "127.0.0.1"
+  port: ":9000"
+
+queue_config:
+  host: "127.0.0.1"
+  port: ":9001"
+
+mongo_config_debug:
+  uri: "localhost:27017"
+  uri_full: "mongodb://localhost:27017"
+  tasks_collection: "tasks_test"
+  db: "raw_test"
+  login: ""
+  password: ""
+
+logging:
+  level: "info"
+
+tasks:
+  url_secret: "qwerty"

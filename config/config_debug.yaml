@@ -1,0 +1,29 @@
+http_server:
+  uri: ":3002"
+  api_version: "/tasks/v1"
+
+auth_grpc:
+  host: ""
+  port: ":4000"
+  transport: "tcp"
+
+tasks_events_grpc:
+  host: ""
+  port: ":9001"
+  transport: "tcp"
+
+mongo:
+  uri: "localhost:27017"
+  uri_full: "mongodb://localhost:27017"
+  tasks_collection: "tasks"
+  db: "tasks"
+
+logging:
+  level: "debug"
+
+kafka:
+  url: "91.185.95.87:9094"
+  task_topic: "team31-taskTopic"
+  mail_topic: "team31-mailTopic"
+  group_id: "tasks"
+  partition: 0

@@ -1,0 +1,271 @@
+basePath: /tasks/v1
+definitions:
+  http.Message:
+    properties:
+      is_error:
+        type: boolean
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  models.Task:
+    properties:
+      creator:
+        type: string
+      description:
+        type: string
+      email_list:
+        items:
+          type: string
+        type: array
+      emailProgress:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
+      ts_created:
+        type: string
+      ts_finished:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:4000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a tasks server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Tasks API
+  version: "1.0"
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: create new task and send mail to approvals
+      operationId: create
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Message'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: create new task
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: update existing task
+      operationId: update
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Message'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: update task
+      tags:
+      - tasks
+  /task/{taskID}/approve/{approvalLogin}:
+    get:
+      description: approve current task by current user
+      operationId: approve
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: string
+      - description: Approval Login
+        in: path
+        name: approvalLogin
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Message'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: approve current task
+      tags:
+      - tasks
+  /task/{taskID}/decline/{approvalLogin}:
+    get:
+      description: decline current task by current user
+      operationId: decline
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: string
+      - description: Approval Login
+        in: path
+        name: approvalLogin
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Message'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: decline current task
+      tags:
+      - tasks
+  /task/{taskName}:
+    delete:
+      consumes:
+      - application/json
+      description: delete existing task
+      operationId: delete
+      parameters:
+      - description: Task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Message'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: delete task
+      tags:
+      - tasks
+    get:
+      description: read existing task
+      operationId: read
+      parameters:
+      - description: Task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: read task
+      tags:
+      - tasks
+  /tasks:
+    get:
+      description: Get list of existing tasks
+      operationId: list
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Message'
+      summary: Get task list created by user
+      tags:
+      - tasks
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
